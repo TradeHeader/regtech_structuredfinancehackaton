@@ -1,0 +1,66 @@
+package cdm.legaldocumentation.master.validation.datarule;
+
+import cdm.legaldocumentation.master.AdditionalDisruptionEvents;
+import com.google.inject.ImplementedBy;
+import com.rosetta.model.lib.annotations.RosettaDataRule;
+import com.rosetta.model.lib.expression.CardinalityOperator;
+import com.rosetta.model.lib.expression.ComparisonResult;
+import com.rosetta.model.lib.mapper.MapperS;
+import com.rosetta.model.lib.path.RosettaPath;
+import com.rosetta.model.lib.validation.ValidationResult;
+import com.rosetta.model.lib.validation.ValidationResult.ValidationType;
+import com.rosetta.model.lib.validation.Validator;
+import java.math.BigDecimal;
+
+import static com.rosetta.model.lib.expression.ExpressionOperators.*;
+
+/**
+ * @version ${project.version}
+ */
+@RosettaDataRule("AdditionalDisruptionEventsMaximumStockLoanRate")
+@ImplementedBy(AdditionalDisruptionEventsMaximumStockLoanRate.Default.class)
+public interface AdditionalDisruptionEventsMaximumStockLoanRate extends Validator<AdditionalDisruptionEvents> {
+	
+	String NAME = "AdditionalDisruptionEventsMaximumStockLoanRate";
+	String DEFINITION = "if maximumStockLoanRate exists then maximumStockLoanRate >= 0 and maximumStockLoanRate <= 1";
+	
+	ValidationResult<AdditionalDisruptionEvents> validate(RosettaPath path, AdditionalDisruptionEvents additionalDisruptionEvents);
+	
+	class Default implements AdditionalDisruptionEventsMaximumStockLoanRate {
+	
+		@Override
+		public ValidationResult<AdditionalDisruptionEvents> validate(RosettaPath path, AdditionalDisruptionEvents additionalDisruptionEvents) {
+			ComparisonResult result = executeDataRule(additionalDisruptionEvents);
+			if (result.get()) {
+				return ValidationResult.success(NAME, ValidationResult.ValidationType.DATA_RULE, "AdditionalDisruptionEvents", path, DEFINITION);
+			}
+			
+			String failureMessage = result.getError();
+			if (failureMessage == null || failureMessage.contains("Null") || failureMessage == "") {
+				failureMessage = "Condition has failed.";
+			}
+			return ValidationResult.failure(NAME, ValidationType.DATA_RULE, "AdditionalDisruptionEvents", path, DEFINITION, failureMessage);
+		}
+		
+		private ComparisonResult executeDataRule(AdditionalDisruptionEvents additionalDisruptionEvents) {
+			try {
+				if (exists(MapperS.of(additionalDisruptionEvents).<BigDecimal>map("getMaximumStockLoanRate", _additionalDisruptionEvents -> _additionalDisruptionEvents.getMaximumStockLoanRate())).getOrDefault(false)) {
+					return greaterThanEquals(MapperS.of(additionalDisruptionEvents).<BigDecimal>map("getMaximumStockLoanRate", _additionalDisruptionEvents -> _additionalDisruptionEvents.getMaximumStockLoanRate()), MapperS.of(BigDecimal.valueOf(0)), CardinalityOperator.All).and(lessThanEquals(MapperS.of(additionalDisruptionEvents).<BigDecimal>map("getMaximumStockLoanRate", _additionalDisruptionEvents -> _additionalDisruptionEvents.getMaximumStockLoanRate()), MapperS.of(BigDecimal.valueOf(1)), CardinalityOperator.All));
+				}
+				return ComparisonResult.successEmptyOperand("");
+			}
+			catch (Exception ex) {
+				return ComparisonResult.failure(ex.getMessage());
+			}
+		}
+	}
+	
+	@SuppressWarnings("unused")
+	class NoOp implements AdditionalDisruptionEventsMaximumStockLoanRate {
+	
+		@Override
+		public ValidationResult<AdditionalDisruptionEvents> validate(RosettaPath path, AdditionalDisruptionEvents additionalDisruptionEvents) {
+			return ValidationResult.success(NAME, ValidationResult.ValidationType.DATA_RULE, "AdditionalDisruptionEvents", path, DEFINITION);
+		}
+	}
+}

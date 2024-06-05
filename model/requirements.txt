@@ -1,0 +1,12 @@
+langchain
+langchain-openai
+langchain-community
+langchain-core
+langchain[docarray]
+docarray
+pydantic==1.10.8
+python-dotenv
+pypdf
+dotenv
+operator
+os
