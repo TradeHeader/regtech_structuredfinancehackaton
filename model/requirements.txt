@@ -4,7 +4,7 @@ langchain-community
 langchain-core
 langchain[docarray]
 docarray
-pydantic==1.10.8
+pydantic==1.10.13
 python-dotenv
 pypdf
 dotenv
