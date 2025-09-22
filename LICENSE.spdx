@@ -1,0 +1,7 @@
+SPDXVersion: SPDX-2.0
+DataLicense: CC0-1.0
+Creator: TradeHeader SL
+PackageName: regtech_structuredfinancehackaton
+PackageOriginator: TradeHeader SL
+PackageHomePage: https://github.com/finos/regtech_structuredfinancehackaton
+PackageLicenseDeclared: Apache-2.0

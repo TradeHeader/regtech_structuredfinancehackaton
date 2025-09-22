@@ -1,8 +1,3 @@
-# These are some examples of commonly ignored file patterns.
-# You should customize this list as applicable to your project.
-# Learn more about .gitignore:
-#     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
-
 # Node artifact files
 node_modules/
 dist/
@@ -48,3 +43,18 @@ Thumbs.db
 *.mov
 *.wmv
 
+.DS_Store
+
+# Docusaurus generated folders
+website/translated_docs/
+website/build/
+website/i18n/
+
+# Yarn build
+website/node_modules/
+
+# Generated docs
+docs/contributing.md
+
+# We use YARN
+website/package-lock.json
